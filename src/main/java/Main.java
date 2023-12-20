@@ -8,15 +8,20 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
         List<City> cityList = new ArrayList<>();
-
-        Scanner scanner = new Scanner(new File("..\\resources\\cities.csv"));
-        scanner.useDelimiter(",");   //delimiter
-        while (scanner.hasNext()) {
-            String[] strings = scanner.next().split(",");
-
-
+        try (Scanner scanner = new Scanner(new File("src/main/resources/cities.csv"))) {
+            scanner.useDelimiter("\\r\\n");   //delimiter
+            while (scanner.hasNextLine()) {
+                String string = scanner.nextLine();
+                String[] strings = string.split(";");
+                cityList.add(new City(strings[1], strings[2], strings[3], Integer.parseInt(strings[4]), strings[5]));
+            }
         }
-        scanner.close();
+        catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(e.getStackTrace());
+        }
+        for (City city : cityList) {
+            System.out.println(city);
+        }
 
     }
 }
